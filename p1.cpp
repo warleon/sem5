@@ -29,10 +29,10 @@ int main(int argc, char **argv) {
   prev = (rank - 1 + numtasks) % numtasks;
   next = (rank + 1 + numtasks) % numtasks;
 
-  if (sflag1.size() != numtasks) {
+  if (int(sflag1.size()) != numtasks) {
     sflag1.resize(numtasks);
   }
-  if (sflag2.size() != numtasks) {
+  if (int(sflag2.size()) != numtasks) {
     sflag2.resize(numtasks);
   }
   t0 = MPI_Wtime();
