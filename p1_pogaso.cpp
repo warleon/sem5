@@ -1,7 +1,10 @@
+#include <math.h>
 #include <mpi.h>
 #include <math.h>
 #include <stdio.h>
+
 #include <iostream>
+
 using namespace std;
 
 const bool P = false; // toggle operation output
@@ -14,16 +17,14 @@ int main(int argc, char **argv)
   double sbuf[N], rbuf_prev[N], rbuf_next[N];
   double t0, t1;
   MPI_Status stats[4];
-  MPI_Init(&argc, &argv);                   // Initialize MPI
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);     // Rank of the processor
-  MPI_Comm_size(MPI_COMM_WORLD, &numtasks); // Total number of processors
+  MPI_Init(&argc, &argv);                    // Initialize MPI
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);      // Rank of the processor
+  MPI_Comm_size(MPI_COMM_WORLD, &numtasks);  // Total number of processors
 
   prev = rank - 1;
   next = rank + 1;
-  if (rank == 0)
-    prev = numtasks - 1;
-  if (rank == (numtasks - 1))
-    next = 0;
+  if (rank == 0) prev = numtasks - 1;
+  if (rank == (numtasks - 1)) next = 0;
 
   srand(123456 + rank);
   for (size_t i = 0; i < N; i++)
@@ -90,12 +91,15 @@ int main(int argc, char **argv)
   t1 = MPI_Wtime();
 
   if (rank == 0)
-    cout << "Processors: " << numtasks <<", N: "<< N 
-    <<", Time (ms): " << 1000*(t1 - t0) << endl;
+    cout << "Processors: " << numtasks << ", N: " << N
+         << ", Time (ms): " << 1000 * (t1 - t0) << endl;
 
-  if (R) cout <<"rank "<< rank << " PREV first/last: " << rbuf_prev[0] <<", "<< rbuf_prev[N-1] << endl;
-  if (R) cout <<"rank "<< rank << " NEXT first/last: " << rbuf_next[0] <<", "<< rbuf_next[N-1] << endl;
-
+  if (R)
+    cout << "rank " << rank << " PREV first/last: " << rbuf_prev[0] << ", "
+         << rbuf_prev[N - 1] << endl;
+  if (R)
+    cout << "rank " << rank << " NEXT first/last: " << rbuf_next[0] << ", "
+         << rbuf_next[N - 1] << endl;
 
   MPI_Finalize();
 }

@@ -1,6 +1,6 @@
 p1:
 	mpic++ p1.cpp -o p1 -Wall
-	mpirun p1
+	mpirun --use-hwthread-cpus p1
 p1_pogaso:
 	mpic++ p1_pogaso.cpp -o p1_pogaso -Wall
 	mpirun --use-hwthread-cpus p1_pogaso
