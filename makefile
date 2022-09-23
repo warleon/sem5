@@ -3,7 +3,7 @@ p1:
 	mpirun p1
 p1_pogaso:
 	mpic++ p1_pogaso.cpp -o p1_pogaso -Wall
-	mpirun p1_pogaso
+	mpirun --use-hwthread-cpus p1_pogaso
 p2:
 	mpic++ p2.cpp -o p2
 	mpirun p2
