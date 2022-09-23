@@ -13,28 +13,16 @@ const bool P = true;  // toggle operation output
 const bool R = true;  // toggle buffer result output
 
 int main(int argc, char **argv) {
+  const size_t N{1 << 10};
   int numtasks, rank, next, prev;
-  //   int buf[2];
   int tag1 = 1, tag2 = 2;
-  // size_t N = (size_t)pow(10, 1);
-  size_t N = (size_t)2;
 
   double sbuf[N], rbuf_prev[N], rbuf_next[N];
-  //  N = 1024;
-  // int sbuf[N], rbuf[N];
-  MPI_Status stats[4];
-
   double t0, t1;
-  int pendingMessage;
-  int msgRecv, msgSend;
-  bool sendNext = false;
-  bool sendBefore = false;
-  //   MPI_Status stats[4];
+
   MPI_Init(&argc, &argv);                    // Initialize MPI
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);      // Rank of the processor
   MPI_Comm_size(MPI_COMM_WORLD, &numtasks);  // Total number of processors
-
-  //   MPI_Request reqs[4];
 
   prev = (rank - 1 + numtasks) % numtasks;
   next = (rank + 1 + numtasks) % numtasks;
@@ -49,22 +37,22 @@ int main(int argc, char **argv) {
 
   t0 = MPI_Wtime();
   if (rank % 2) {
-    MPI_Recv(rbuf_prev, N, MPI_INT, prev, MPI_ANY_TAG, MPI_COMM_WORLD,
+    MPI_Recv(rbuf_prev, N, MPI_DOUBLE, prev, MPI_ANY_TAG, MPI_COMM_WORLD,
              MPI_STATUS_IGNORE);
-    MPI_Recv(rbuf_next, N, MPI_INT, next, MPI_ANY_TAG, MPI_COMM_WORLD,
+    MPI_Recv(rbuf_next, N, MPI_DOUBLE, next, MPI_ANY_TAG, MPI_COMM_WORLD,
              MPI_STATUS_IGNORE);
   } else {
-    MPI_Send(sbuf, N, MPI_INT, next, tag1, MPI_COMM_WORLD);
-    MPI_Send(sbuf, N, MPI_INT, prev, tag2, MPI_COMM_WORLD);
+    MPI_Send(sbuf, N, MPI_DOUBLE, next, tag1, MPI_COMM_WORLD);
+    MPI_Send(sbuf, N, MPI_DOUBLE, prev, tag2, MPI_COMM_WORLD);
   }
   if (!(rank % 2)) {
-    MPI_Recv(rbuf_prev, N, MPI_INT, prev, MPI_ANY_TAG, MPI_COMM_WORLD,
+    MPI_Recv(rbuf_prev, N, MPI_DOUBLE, prev, MPI_ANY_TAG, MPI_COMM_WORLD,
              MPI_STATUS_IGNORE);
-    MPI_Recv(rbuf_next, N, MPI_INT, next, MPI_ANY_TAG, MPI_COMM_WORLD,
+    MPI_Recv(rbuf_next, N, MPI_DOUBLE, next, MPI_ANY_TAG, MPI_COMM_WORLD,
              MPI_STATUS_IGNORE);
   } else {
-    MPI_Send(sbuf, N, MPI_INT, next, tag1, MPI_COMM_WORLD);
-    MPI_Send(sbuf, N, MPI_INT, prev, tag2, MPI_COMM_WORLD);
+    MPI_Send(sbuf, N, MPI_DOUBLE, next, tag1, MPI_COMM_WORLD);
+    MPI_Send(sbuf, N, MPI_DOUBLE, prev, tag2, MPI_COMM_WORLD);
   }
   if (P) cout << "finished rank: " << rank << endl;
 
