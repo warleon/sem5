@@ -15,26 +15,15 @@ const bool R = false; // toggle buffer result output
 int main(int argc, char **argv)
 {
   int numtasks, rank, next, prev;
-  //   int buf[2];
   int tag1 = 1, tag2 = 2;
   size_t N = (size_t)pow(10, 5);
 
   double sbuf[N], rbuf_prev[N], rbuf_next[N];
-  //  N = 1024;
-  // int sbuf[N], rbuf[N];
-  // MPI_Status stats[4];
-
   double t0, t1;
-  // int pendingMessage;
-  // int msgRecv, msgSend;
-  // bool sendNext = false;
-  // bool sendBefore = false;
-  //   MPI_Status stats[4];
-  MPI_Init(&argc, &argv);                   // Initialize MPI
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);     // Rank of the processor
-  MPI_Comm_size(MPI_COMM_WORLD, &numtasks); // Total number of processors
 
-  //   MPI_Request reqs[4];
+  MPI_Init(&argc, &argv);                    // Initialize MPI
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);      // Rank of the processor
+  MPI_Comm_size(MPI_COMM_WORLD, &numtasks);  // Total number of processors
 
   prev = (rank - 1 + numtasks) % numtasks;
   next = (rank + 1 + numtasks) % numtasks;
