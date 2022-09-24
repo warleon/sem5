@@ -22,16 +22,17 @@ int main(void) {
   }
 
   // comunicacion
-  size_t my_rowsBegin = (N / comm_sz) * my_rank;
-  size_t my_workload = N / comm_sz;
-  size_t my_rowsEnd = my_rowsBegin + N / my_workload;
+  const size_t my_rowsBegin{(N / comm_sz) * my_rank};
+  const size_t my_workload{N / comm_sz};
+  const size_t my_rowsEnd{my_rowsBegin + N / my_workload};
+  double my_mat[my_workload][N]{};
   MPI_Bcast(vec, N, MPI_DOUBLE, 0, MPI_COMM_WORLD);
-  MPI_Scatter(mat, N * N, MPI_DOUBLE, &mat[my_rowsBegin][0], my_workload * N,
-              MPI_DOUBLE, 0, MPI_COMM_WORLD);
+  MPI_Scatter(mat, N * N, MPI_DOUBLE, my_mat, my_workload * N, MPI_DOUBLE, 0,
+              MPI_COMM_WORLD);
 
   // Procesar
   for (size_t i = 0; i < my_workload; i++) {
-    for (size_t j = 0; j < N; j++) x[i] += mat[my_rowsBegin + i][j] * vec[j];
+    for (size_t j = 0; j < N; j++) x[i] += my_mat[i][j] * vec[j];
   }
 
   // comunicacion
