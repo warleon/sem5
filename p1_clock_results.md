@@ -1,6 +1,6 @@
-# cmd (bash):
+# cmd (bash): 
 ```bash
-for run in {1..100}; do mpirun --use-hwthread-cpus -np <processes> p1_pogaso; done
+for run in {1..100}; do mpirun --use-hwthread-cpus -np <processors> p1_clock; done > results.txt
 ```
 # 1 process, 10^5 vals
 ```
