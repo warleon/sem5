@@ -6,6 +6,7 @@
 
 int main(void) {
   int my_rank, comm_sz;
+  double t0, t1, t3, t4;
 
   const size_t N{1 << 4};
   double mat[N][N]{}, vec[N]{}, x[N]{};
@@ -19,10 +20,11 @@ int main(void) {
     for (size_t i = 0; i < N; i++) {
       vec[i] = (double)rand() / RAND_MAX;
       for (size_t j = 0; j < N; j++) mat[i][j] = (double)rand() / RAND_MAX;
-      std::cout << std::left << std::setprecision(6) << std::setw(10) << vec[i];
+      // std::cout << std::left << std::setprecision(6) << std::setw(10) << vec[i];
     }
     std::cout << "\n";
   }
+  t0 = MPI_Wtime();
 
   // comunicacion
   const size_t my_rowsBegin{(N / comm_sz) * my_rank};
@@ -43,10 +45,15 @@ int main(void) {
              MPI_COMM_WORLD);
   if (!my_rank) {
     for (size_t i = 0; i < N; i++) {
-      std::cout << std::left << std::setprecision(6) << std::setw(10) << vec[i];
+      // std::cout << std::left << std::setprecision(6) << std::setw(10) << vec[i];
     }
-    std::cout << "\n";
+    // std::cout << "\n";
   }
+  t1 = MPI_Wtime();
+
+  if (my_rank == 0)
+    std::cout << "+ " <<1000 * (t1 - t0);
+
 
   MPI_Finalize();
   return 0;

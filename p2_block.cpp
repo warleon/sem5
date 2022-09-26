@@ -13,8 +13,8 @@ const bool R = false; // toggle buffer result output
 int main(int argc, char **argv)
 {
   int numtasks, rank, next, prev, tag1 = 1, tag2 = 2;
-  size_t N = (size_t)pow(10,5);
-  // size_t N = 0;
+  // size_t N = (size_t)pow(10,2);
+  size_t N = 0;
 
   double sbuf[N], rbuf_prev[N], rbuf_next[N];
   double t0, t1, t3, t4;

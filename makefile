@@ -14,4 +14,4 @@ p3:
 	mpic++ p3.cpp -o p3
 	mpirun p3
 
-.PHONY: p1_clock p1_mod p2_block p2_nonblock
+.PHONY: p1_clock p1_mod p2_block p2_nonblock p3
