@@ -1,6 +1,7 @@
 #include <math.h>
 #include <mpi.h>
 #include <stdio.h>
+#include <iostream>
 
 #include <iomanip>
 
@@ -9,7 +10,7 @@ int main(void)
   int my_rank, comm_sz;
   double t0, t1, t3, t4;
 
-  const size_t N{1 << 4};
+  const size_t N{1 << 8};
   double mat[N][N]{}, vec[N]{}, x[N]{};
 
   MPI_Init(NULL, NULL);
@@ -25,7 +26,6 @@ int main(void)
       for (size_t j = 0; j < N; j++)
         mat[i][j] = (double)rand() / RAND_MAX;
     }
-    std::cout << "\n";
   }
 
   t0 = MPI_Wtime();
@@ -43,25 +43,18 @@ int main(void)
   // Procesar
   for (size_t i = 0; i < my_workload; i++)
   {
-    for (size_t j = 0; j < N; j++)
+    for (size_t j = 0; j < N; j++) 
       x[i] += my_mat[i][j] * vec[j];
   }
 
   // comunicacion
   MPI_Gather(x, my_workload, MPI_DOUBLE, vec, my_workload, MPI_DOUBLE, 0,
              MPI_COMM_WORLD);
-  if (!my_rank)
-  {
-    for (size_t i = 0; i < N; i++)
-    {
-      std::cout << std::left << std::setprecision(6) << std::setw(10) << vec[i];
-    }
-    std::cout << "\n";
-  }
+ 
   t1 = MPI_Wtime();
 
   if (my_rank == 0)
-    std::cout << "+ " << 1000 * (t1 - t0);
+    std::cout << 1000 * (t1 - t0) << "\n";
 
   MPI_Finalize();
   return 0;
